@@ -11,7 +11,9 @@ password = os.environ['WEATHERAPI_PASSWORD']
 
 while True:
     humidity, temperature = Adafruit_DHT.read_retry(11, 4)
-    print 'Temp: {0:0.1f}°C,  Humidity: {1:0.1f}%'.format(temperature, humidity)
-    print "curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format(temperature, username, password, temp_id)
-    #os.system("curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format("cool", "Hello there!"))
-    time.sleep(1)
+    print 'Temp: {0:0.1f}C,  Humidity: {1:0.1f}%'.format(temperature, humidity)
+    print "curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id)
+    os.system("curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
+    print "curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id)
+    os.system("curl -X POST -F 'value={0:0d}' -u {1}:{2} http://weatherapp.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
+    time.sleep(120)
