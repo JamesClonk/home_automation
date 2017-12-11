@@ -4,8 +4,8 @@ import time
 import os
 import Adafruit_DHT
 
-temp_id = 25
-hum_id = 22
+temp_id = 1
+hum_id = 2
 username = os.environ['WEATHERAPI_USERNAME']
 password = os.environ['WEATHERAPI_PASSWORD']
 
