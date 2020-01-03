@@ -11,7 +11,7 @@ password = os.environ['AUTH_PASSWORD']
 dht_pin = 4
 
 # set to Adafruit_DHT.DHT11, Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302
-sensor = Adafruit_DHT.DHT11
+sensor = Adafruit_DHT.DHT22
 
 while True:
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
