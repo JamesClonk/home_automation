@@ -26,3 +26,7 @@
 
 0,2,5 8 * * * /root/turn_air_quality_lamp_on.sh
 45,47,50 11 * * * /root/turn_air_quality_lamp_off.sh
+
+0,2,5 3 * * * /root/turn_food_plants_lamp_on.sh
+45,47,50 18 * * * /root/turn_food_plants_lamp_off.sh
+
