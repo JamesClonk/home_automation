@@ -23,6 +23,7 @@
 #0,15,30,45 * * * * /root/monitor_irnotify.sh
 5,35 * * * * /root/monitor_home.sh >/dev/null 2>&1
 7,37 * * * * /root/monitor_air_quality_lamp_temp.sh >/dev/null 2>&1
+9,39 * * * * /root/monitor_food_plants_lamp_temp.sh >/dev/null 2>&1
 
 0,2,5 8 * * * /root/turn_air_quality_lamp_on.sh >/dev/null 2>&1
 45,47,50 11 * * * /root/turn_air_quality_lamp_off.sh >/dev/null 2>&1
