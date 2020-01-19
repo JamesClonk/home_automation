@@ -8,7 +8,9 @@ while true; do
   export LAMP_TEMP=$(echo "${LAMP_TEMP_LONG}" | awk '{print int($1);}')
   echo "Temp: ${LAMP_TEMP_SHORT}C (${LAMP_TEMP}°)"
 
-  curl -X POST -d "value=${LAMP_TEMP}" -u "${AUTH_USERNAME}:${AUTH_PASSWORD}" "https://home-info.scapp.io/sensor/${SENSOR_ID}/value"
+  if [[ "${LAMP_TEMP}" != "0" ]]; then
+    curl -X POST -d "value=${LAMP_TEMP}" -u "${AUTH_USERNAME}:${AUTH_PASSWORD}" "https://home-info.scapp.io/sensor/${SENSOR_ID}/value"
+  fi
 
   sleep 300
 done
