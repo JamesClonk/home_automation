@@ -37,8 +37,9 @@ while True:
     # read soil moisture
     moisture = automationhat.analog.one.read()
     print 'Soil Moisture value: {0:0.1f}'.format(moisture)
-    print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id)
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id))
+    if moisture > 0:
+        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id)
+        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id))
 
     if moisture > 2:
         water()
