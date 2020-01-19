@@ -6,7 +6,5 @@ running=`ps -ef | grep 'report_air_quality_lamp_temp.sh' | grep -v 'grep' | wc -
 
 if [ "$running" -eq "0" ]
 then
-    export AUTH_USERNAME=xyz
-    export AUTH_PASSWORD=abc
     ./report_air_quality_lamp_temp.sh &
 fi

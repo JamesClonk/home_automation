@@ -1,0 +1,4 @@
+# home automation config
+export AUTH_USERNAME='username'
+export AUTH_PASSWORD='password'
+

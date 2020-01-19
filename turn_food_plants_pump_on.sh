@@ -19,11 +19,11 @@ retry() {
 }
 
 check() {
-    curl -s -o /dev/null -w "%{http_code}" http://192.168.1.161/relay?state=0 | grep 200
+    curl -s -o /dev/null -w "%{http_code}" http://192.168.1.163/relay?state=1 | grep 200
 }
 
 retry 10 check
-#curl http://192.168.1.161/relay?state=0
+#curl http://192.168.1.163/relay?state=1
 
 exit 0
 

@@ -25,3 +25,5 @@ check() {
 retry 10 check
 #curl http://192.168.1.161/relay?state=1
 
+exit 0
+
