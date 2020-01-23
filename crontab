@@ -20,6 +20,7 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
+*/15 * * * * . /root/.home-automation; /root/home_automation/monitor_wifi.sh >/dev/null 2>&1
 
 # uncomment if needed
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_living_room.sh >/dev/null 2>&1
