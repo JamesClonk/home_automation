@@ -9,6 +9,7 @@ temp_id = 1
 hum_id = 2
 soil_id_one = 10
 soil_id_two = 12
+soil_id_three = 13 # used for an additional air quality plant
 username = os.environ['AUTH_USERNAME']
 password = os.environ['AUTH_PASSWORD']
 dht_pin = 8
@@ -39,13 +40,19 @@ while True:
     # read soil moisture
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
-    print 'Soil Moisture values: {0:0.1f}, {0:0.1f}'.format(moisture_one, moisture_two)
+    moisture_three = automationhat.analog.three.read()
+
+    print 'Air Quality Plant - Soil Moisture value: {0:0.1f}'.format(moisture_three)
+    if moisture_three > 0:
+        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three*100), username, password, soil_id_three)
+        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three*100), username, password, soil_id_three))
+
+    print 'Food Plants - Soil Moisture values: {0:0.1f}, {0:0.1f}'.format(moisture_one, moisture_two)
     if moisture_one > 0 and moisture_two > 0:
         print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one*100), username, password, soil_id_one)
         os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one*100), username, password, soil_id_one))
         print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two*100), username, password, soil_id_two)
         os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two*100), username, password, soil_id_two))
-
     if moisture_one > 2 or moisture_two > 2:
         water()
 
