@@ -4,3 +4,6 @@
 [submodule "Adafruit_Python_ADS1x15"]
 	path = Adafruit_Python_ADS1x15
 	url = https://github.com/JamesClonk/Adafruit_Python_ADS1x15.git
+[submodule "automation-hat"]
+	path = automation-hat
+	url = https://github.com/pimoroni/automation-hat.git

@@ -10,7 +10,7 @@ hum_id = 2
 soil_id = 11
 username = os.environ['AUTH_USERNAME']
 password = os.environ['AUTH_PASSWORD']
-dht_pin = 8
+dht_pin = 4
 
 # set to Adafruit_DHT.DHT11, Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302
 sensor = Adafruit_DHT.DHT22
@@ -18,9 +18,9 @@ sensor = Adafruit_DHT.DHT22
 # setup pimoroni
 #automationhat.light.comms.toggle()
 #automationhat.light.warn.toggle()
-automationhat.light.power.write(1)
-automationhat.output.two.on()
-automationhat.output.one.on()
+#automationhat.light.power.write(1)
+#automationhat.output.two.on()
+#automationhat.output.one.on()
 
 def water():
     print "turning on water pump ..."
@@ -35,14 +35,14 @@ def water():
 
 while True:
     # read soil moisture
-    moisture = automationhat.analog.one.read()
-    print 'Soil Moisture value: {0:0.1f}'.format(moisture)
-    if moisture > 0:
-        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id)
-        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id))
+    #moisture = automationhat.analog.one.read()
+    #print 'Soil Moisture value: {0:0.1f}'.format(moisture)
+    #if moisture > 0:
+    #    print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id)
+    #    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture*100), username, password, soil_id))
 
-    if moisture > 2:
-        water()
+    #if moisture > 2:
+    #    water()
 
     # read temp/humidity sensor
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
