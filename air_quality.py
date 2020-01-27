@@ -10,7 +10,7 @@ hum_id = 2
 soil_id = 11
 username = os.environ['AUTH_USERNAME']
 password = os.environ['AUTH_PASSWORD']
-dht_pin = 4
+dht_pin = 8
 
 # set to Adafruit_DHT.DHT11, Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302
 sensor = Adafruit_DHT.DHT22
@@ -21,6 +21,18 @@ sensor = Adafruit_DHT.DHT22
 #automationhat.light.power.write(1)
 #automationhat.output.two.on()
 #automationhat.output.one.on()
+
+def remap_range(value, left_min, left_max, right_min, right_max):
+    # this remaps a value from original (left) range to new (right) range
+    # Figure out how 'wide' each range is
+    left_span = left_max - left_min
+    right_span = right_max - right_min
+ 
+    # Convert the left range into a 0-1 range (int)
+    valueScaled = int(value - left_min) / int(left_span)
+ 
+    # Convert the 0-1 range into a value in the right range.
+    return int(right_min + (valueScaled * right_span))
 
 def water():
     print "turning on water pump ..."
