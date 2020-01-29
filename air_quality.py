@@ -24,17 +24,18 @@ automationhat.output.three.on()
 automationhat.output.two.on()
 automationhat.output.one.on()
 
-def remap_range(value, left_min, left_max, right_min, right_max):
-    # this remaps a value from original (left) range to new (right) range
-    # Figure out how 'wide' each range is
-    left_span = left_max - left_min
-    right_span = right_max - right_min
- 
-    # Convert the left range into a 0-1 range (int)
-    valueScaled = int(value - left_min) / int(left_span)
- 
-    # Convert the 0-1 range into a value in the right range.
-    return int(right_min + (valueScaled * right_span))
+def map(value, leftMin, leftMax, rightMin, rightMax):
+    leftSpan = leftMax - leftMin
+    rightSpan = rightMax - rightMin
+    valueScaled = float(value - leftMin) / float(leftSpan)
+    return rightMin + (valueScaled * rightSpan)
+
+def cut(value, minValue, maxValue):
+    if value < minValue:
+        return minValue
+    if value > maxValue:
+        return maxValue
+    return value
 
 def water():
     print "turning on water pump ..."
@@ -51,14 +52,18 @@ while True:
     # read soil moisture
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
+    moisture_three = automationhat.analog.three.read()
 
-    print 'Air Quality Plants - Soil Moisture values: {0:0.1f}, {0:0.1f}'.format(moisture_one, moisture_two)
+    print 'Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
+    moisture_one = cut(map(moisture_one, 1.14, 1.3, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.4, 2.3, 100, 0), 0, 100)
+    print 'Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
     if moisture_one > 0 and moisture_two > 0:
-        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one*400), username, password, soil_id_one)
-        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one*400), username, password, soil_id_one))
-        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two*110), username, password, soil_id_two)
-        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two*110), username, password, soil_id_two))
-    if moisture_one > 2:
+        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
+        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
+        print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
+        os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+    if moisture_one < 25:
         water()
 
     # read temp/humidity sensor
