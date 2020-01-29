@@ -48,7 +48,7 @@ def water():
     print "./turn_air_quality_pump_off.sh"
     os.system("./turn_air_quality_pump_off.sh")
 
-while True:
+def read_soil():
     # read soil moisture
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
@@ -58,6 +58,16 @@ while True:
     moisture_one = cut(map(moisture_one, 1.14, 1.3, 100, 0), 0, 100)
     moisture_two = cut(map(moisture_two, 1.4, 2.3, 100, 0), 0, 100)
     print 'Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
+    return moisture_one, moisture_two
+
+while True:
+    # read soil moisture
+    moisture_one, moisture_two = read_soil()
+    if moisture_one <= 1 or moisture_two <= 1:
+        # reread
+        time.sleep(1)
+        moisture_one, moisture_two = read_soil()
+
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
