@@ -49,8 +49,7 @@ def water():
     print "./turn_food_plants_pump_off.sh"
     os.system("./turn_food_plants_pump_off.sh")
 
-while True:
-    # read soil moisture
+def read_soil():
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
     moisture_three = automationhat.analog.three.read()
@@ -58,13 +57,24 @@ while True:
     print 'Air Quality Plant - Soil Moisture value: {0:0.3f}'.format(moisture_three)
     moisture_three = cut(map(moisture_three, 1.6, 3.2, 100, 0), 0, 100)
     print 'Air Quality Plant - Remapped value: {0:0.3f}'.format(moisture_three)
-    print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three)
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three))
 
     print 'Food Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
     moisture_one = cut(map(moisture_one, 0, 0.22, 100, 0), 0, 100)
     moisture_two = cut(map(moisture_two, 0, 2.62, 100, 0), 0, 100)
     print 'Food Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
+
+    return moisture_one, moisture_two, moisture_three
+
+while True:
+    # read soil moisture
+    moisture_one, moisture_two, moisture_three = read_soil()
+    if moisture_three <= 1:
+        # reread
+        time.sleep(1)
+        moisture_one, moisture_two, moisture_three = read_soil()
+
+    print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three)
+    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three))
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
