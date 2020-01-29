@@ -17,10 +17,10 @@ dht_pin = 8
 sensor = Adafruit_DHT.DHT22
 
 # setup pimoroni
-#automationhat.light.comms.toggle()
-#automationhat.light.warn.toggle()
+automationhat.light.comms.toggle()
+automationhat.light.warn.toggle()
 automationhat.light.power.write(1)
-automationhat.output.three.on()
+#automationhat.output.three.on()
 automationhat.output.two.on()
 automationhat.output.one.on()
 
@@ -52,7 +52,7 @@ def read_soil():
     # read soil moisture
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
-    moisture_three = automationhat.analog.three.read()
+    #moisture_three = automationhat.analog.three.read()
 
     print 'Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
     moisture_one = cut(map(moisture_one, 1.14, 1.3, 100, 0), 0, 100)
@@ -65,7 +65,7 @@ while True:
     moisture_one, moisture_two = read_soil()
     if moisture_one <= 1 or moisture_two <= 1:
         # reread
-        time.sleep(1)
+        time.sleep(2)
         moisture_one, moisture_two = read_soil()
 
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
