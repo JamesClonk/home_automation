@@ -22,7 +22,7 @@ check() {
     curl -s -o /dev/null -w "%{http_code}" http://192.168.1.162/relay?state=1 | grep 200
 }
 
-retry 10 check
+retry 3 check
 #curl http://192.168.1.162/relay?state=1
 
 exit 0

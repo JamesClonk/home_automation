@@ -4,6 +4,7 @@ import time
 import os
 import Adafruit_DHT
 import automationhat
+time.sleep(0.5)
 
 temp_id = 1
 hum_id = 2
@@ -17,9 +18,9 @@ dht_pin = 8
 sensor = Adafruit_DHT.DHT22
 
 # setup pimoroni
-automationhat.light.comms.toggle()
-automationhat.light.warn.toggle()
-automationhat.light.power.write(1)
+automationhat.light.comms.off()
+automationhat.light.warn.off()
+automationhat.light.power.off()
 #automationhat.output.three.on()
 automationhat.output.two.on()
 automationhat.output.one.on()
@@ -42,7 +43,7 @@ def water():
     print("./turn_air_quality_pump_on.sh")
     os.system("./turn_air_quality_pump_on.sh")
 
-    time.sleep(30)
+    time.sleep(5) # the pump is crazy strong, 5s should be enough
 
     print("turning off water pump ...")
     print("./turn_air_quality_pump_off.sh")
@@ -60,7 +61,7 @@ def read_soil():
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
 
-while True:
+def update():
     # read soil moisture
     moisture_one, moisture_two = read_soil()
     if moisture_one <= 1 or moisture_two <= 1:
@@ -82,4 +83,7 @@ while True:
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
     print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
-    time.sleep(300)
+
+# read and update values
+update()
+

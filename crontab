@@ -26,7 +26,9 @@
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_living_room.sh >/dev/null 2>&1
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_bedroom.sh >/dev/null 2>&1
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_air_quality.sh >/dev/null 2>&1
+#*/5 * * * * . /root/.home-automation; /root/home_automation/monitor_air_quality.sh >/dev/null 2>&1
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants.sh >/dev/null 2>&1
+#*/5 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants.sh >/dev/null 2>&1
 7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_air_quality_lamp_temp.sh >/dev/null 2>&1
 9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants_lamp_temp.sh >/dev/null 2>&1
 
