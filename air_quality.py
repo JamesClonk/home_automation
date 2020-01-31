@@ -21,14 +21,17 @@ sensor = Adafruit_DHT.DHT22
 automationhat.enable_auto_lights(False)
 automationhat.analog.one.auto_light(False)
 automationhat.analog.two.auto_light(False)
+automationhat.analog.three.auto_light(False)
 automationhat.analog.one.light.off()
 automationhat.analog.two.light.off()
+automationhat.analog.three.light.off()
 automationhat.light.comms.off()
 automationhat.light.warn.off()
 automationhat.light.power.off()
 time.sleep(1)
-automationhat.output.two.on()
 automationhat.output.one.on()
+automationhat.output.two.on()
+automationhat.output.three.on()
 time.sleep(2) # let it settle
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
@@ -66,7 +69,7 @@ def read_soil():
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
 
-while True:
+def update():
     # read soil moisture
     moisture_one, moisture_two = read_soil()
     if moisture_one <= 1 or moisture_two <= 1:
@@ -90,5 +93,5 @@ while True:
     print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
     
-    time.sleep(300)
+update()
 

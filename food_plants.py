@@ -75,7 +75,7 @@ def read_soil():
 
     return moisture_one, moisture_two, moisture_three
 
-while True:
+def update():
     # read soil moisture
     moisture_one, moisture_two, moisture_three = read_soil()
     if moisture_three <= 1:
@@ -88,7 +88,7 @@ while True:
 
     if moisture_one <= 1 or moisture_two <= 1:
         # reread
-        time.sleep(2)
+        time.sleep(3)
         moisture_one, moisture_two, moisture_three = read_soil()
 
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
@@ -107,5 +107,5 @@ while True:
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
 
-    time.sleep(300)
+update()
 
