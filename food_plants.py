@@ -4,6 +4,7 @@ import time
 import os
 import Adafruit_DHT
 import automationhat
+time.sleep(1)
 
 temp_id = 1
 hum_id = 2
@@ -18,12 +19,21 @@ dht_pin = 8
 sensor = Adafruit_DHT.DHT22
 
 # setup pimoroni
-#automationhat.light.comms.toggle()
-#automationhat.light.warn.toggle()
-automationhat.light.power.write(1)
-automationhat.output.three.on()
-automationhat.output.two.on()
+automationhat.enable_auto_lights(False)
+automationhat.analog.one.auto_light(False)
+automationhat.analog.two.auto_light(False)
+automationhat.analog.three.auto_light(False)
+automationhat.analog.one.light.off()
+automationhat.analog.two.light.off()
+automationhat.analog.three.light.off()
+automationhat.light.comms.off()
+automationhat.light.warn.off()
+automationhat.light.power.off()
+time.sleep(1)
 automationhat.output.one.on()
+automationhat.output.two.on()
+automationhat.output.three.on()
+time.sleep(2) # let it settle
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
     leftSpan = leftMax - leftMin
@@ -43,7 +53,7 @@ def water():
     print "./turn_food_plants_pump_on.sh"
     os.system("./turn_food_plants_pump_on.sh")
 
-    time.sleep(30)
+    time.sleep(5) # the pump is crazy strong, 5s should be enough
 
     print "turning off water pump ..."
     print "./turn_food_plants_pump_off.sh"
@@ -55,12 +65,12 @@ def read_soil():
     moisture_three = automationhat.analog.three.read()
 
     print 'Air Quality Plant - Soil Moisture value: {0:0.3f}'.format(moisture_three)
-    moisture_three = cut(map(moisture_three, 1.6, 3.2, 100, 0), 0, 100)
+    moisture_three = cut(map(moisture_three, 1.6, 3.1, 100, 0), 0, 100)
     print 'Air Quality Plant - Remapped value: {0:0.3f}'.format(moisture_three)
 
     print 'Food Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
-    moisture_one = cut(map(moisture_one, 0, 0.22, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 0, 2.62, 100, 0), 0, 100)
+    moisture_one = cut(map(moisture_one, 1.6, 3.1, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.6, 3.1, 100, 0), 0, 100)
     print 'Food Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
 
     return moisture_one, moisture_two, moisture_three
@@ -70,15 +80,22 @@ while True:
     moisture_one, moisture_two, moisture_three = read_soil()
     if moisture_three <= 1:
         # reread
-        time.sleep(1)
+        time.sleep(2)
         moisture_one, moisture_two, moisture_three = read_soil()
 
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_three), username, password, soil_id_three))
+
+    if moisture_one <= 1 or moisture_two <= 1:
+        # reread
+        time.sleep(2)
+        moisture_one, moisture_two, moisture_three = read_soil()
+
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+
     if moisture_one < 25 or moisture_two < 25:
         water()
 
@@ -89,4 +106,6 @@ while True:
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
+
     time.sleep(300)
+
