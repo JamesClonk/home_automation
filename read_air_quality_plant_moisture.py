@@ -3,16 +3,21 @@ import sys
 import time
 import os
 import automationhat
-time.sleep(0.5)
+time.sleep(1)
 
 # setup pimoroni
-#automationhat.enable_auto_lights(False)
-#automationhat.analog.one.auto_light(False)
-#automationhat.analog.two.auto_light(False)
-#automationhat.analog.one.light.on()
-#automationhat.analog.two.light.on()
+automationhat.enable_auto_lights(False)
+automationhat.analog.one.auto_light(False)
+automationhat.analog.two.auto_light(False)
+automationhat.analog.one.light.off()
+automationhat.analog.two.light.off()
+automationhat.light.comms.off()
+automationhat.light.warn.off()
+automationhat.light.power.off()
+time.sleep(1)
 automationhat.output.one.on()
 automationhat.output.two.on()
+time.sleep(2) # let it settle
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
     leftSpan = leftMax - leftMin
@@ -34,12 +39,12 @@ def read_soil():
     #moisture_three = automationhat.analog.three.read()
 
     print('Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
-    moisture_one = cut(map(moisture_one, 1.14, 1.3, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 1.4, 2.3, 100, 0), 0, 100)
+    moisture_one = cut(map(moisture_one, 1.8, 3.2, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.75, 3.1, 100, 0), 0, 100)
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
 
 while True:
     # read soil moisture
     moisture_one, moisture_two = read_soil()
-    time.sleep(3)
+    time.sleep(2)

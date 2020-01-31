@@ -4,7 +4,7 @@ import time
 import os
 import Adafruit_DHT
 import automationhat
-time.sleep(0.5)
+time.sleep(1)
 
 temp_id = 1
 hum_id = 2
@@ -18,13 +18,18 @@ dht_pin = 8
 sensor = Adafruit_DHT.DHT22
 
 # setup pimoroni
+automationhat.enable_auto_lights(False)
+automationhat.analog.one.auto_light(False)
+automationhat.analog.two.auto_light(False)
+automationhat.analog.one.light.off()
+automationhat.analog.two.light.off()
 automationhat.light.comms.off()
 automationhat.light.warn.off()
 automationhat.light.power.off()
-#automationhat.output.three.on()
+time.sleep(1)
 automationhat.output.two.on()
 automationhat.output.one.on()
-time.sleep(0.5)
+time.sleep(2) # let it settle
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
     leftSpan = leftMax - leftMin
@@ -54,20 +59,19 @@ def read_soil():
     # read soil moisture
     moisture_one = automationhat.analog.one.read()
     moisture_two = automationhat.analog.two.read()
-    #moisture_three = automationhat.analog.three.read()
 
     print('Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
-    moisture_one = cut(map(moisture_one, 1.14, 1.3, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 1.4, 2.3, 100, 0), 0, 100)
+    moisture_one = cut(map(moisture_one, 1.8, 3.2, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.75, 3.1, 100, 0), 0, 100)
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
 
-def update():
+while True:
     # read soil moisture
     moisture_one, moisture_two = read_soil()
     if moisture_one <= 1 or moisture_two <= 1:
         # reread
-        time.sleep(2)
+        time.sleep(3)
         moisture_one, moisture_two = read_soil()
 
     print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
@@ -84,7 +88,6 @@ def update():
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
     print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
-
-# read and update values
-update()
+    
+    time.sleep(300)
 
