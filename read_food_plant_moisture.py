@@ -42,12 +42,12 @@ def read_soil():
     moisture_three = automationhat.analog.three.read()
 
     print 'Air Quality Plant - Soil Moisture value: {0:0.3f}'.format(moisture_three)
-    moisture_three = cut(map(moisture_three, 1.6, 3.1, 100, 0), 0, 100)
+    moisture_three = cut(map(moisture_three, 1.5, 3.1, 100, 0), 0, 100)
     print 'Air Quality Plant - Remapped value: {0:0.3f}'.format(moisture_three)
 
     print 'Food Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
-    moisture_one = cut(map(moisture_one, 1.6, 3.1, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 1.6, 3.1, 100, 0), 0, 100)
+    moisture_one = cut(map(moisture_one, 1.5, 3.1, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.5, 3.1, 100, 0), 0, 100)
     print 'Food Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
 
     return moisture_one, moisture_two, moisture_three
