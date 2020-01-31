@@ -24,6 +24,7 @@ automationhat.light.power.off()
 #automationhat.output.three.on()
 automationhat.output.two.on()
 automationhat.output.one.on()
+time.sleep(0.5)
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
     leftSpan = leftMax - leftMin
