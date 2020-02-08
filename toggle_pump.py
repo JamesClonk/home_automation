@@ -20,6 +20,6 @@ time.sleep(2) # let it settle
 while True:
     #automationhat.relay.one.toggle()
     automationhat.relay.one.on()
-    time.sleep(1)
+    time.sleep(3)
     automationhat.relay.one.off()
-    time.sleep(5)
+    time.sleep(10)

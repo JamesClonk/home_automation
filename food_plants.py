@@ -8,8 +8,8 @@ time.sleep(1)
 
 temp_id = 1
 hum_id = 2
-soil_id_one = 10
-soil_id_two = 12
+soil_id_one = 12
+soil_id_two = 10
 soil_id_three = 13 # used for an additional air quality plant
 username = os.environ['AUTH_USERNAME']
 password = os.environ['AUTH_PASSWORD']
