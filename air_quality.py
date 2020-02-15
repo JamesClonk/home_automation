@@ -65,7 +65,7 @@ def read_soil():
 
     print('Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     moisture_one = cut(map(moisture_one, 1.5, 3.1, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 1.5, 3.1, 100, 0), 0, 100)
+    moisture_two = cut(map(moisture_two, 1.4, 3.1, 100, 0), 0, 100)
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
 

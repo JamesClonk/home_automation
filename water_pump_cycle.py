@@ -17,11 +17,11 @@ automationhat.light.power.off()
 automationhat.relay.one.off()
 time.sleep(2) # let it settle
 
-# do 3 bursts
-for x in range(0, 3):
+# do 5 bursts
+for x in range(0, 5):
     #automationhat.relay.one.toggle()
     automationhat.relay.one.on()
     time.sleep(3)
     automationhat.relay.one.off()
-    time.sleep(15)
+    time.sleep(30)
 
