@@ -49,15 +49,10 @@ def cut(value, minValue, maxValue):
     return value
 
 def water():
-    print "turning on water pump ..."
-    print "./turn_food_plants_pump_on.sh"
-    os.system("./turn_food_plants_pump_on.sh")
-
-    time.sleep(5) # the pump is crazy strong, 5s should be enough
-
-    print "turning off water pump ..."
-    print "./turn_food_plants_pump_off.sh"
-    os.system("./turn_food_plants_pump_off.sh")
+    print "trigger water pump cycle ..."
+    print "./trigger_water_pump_cycle.sh"
+    os.system("./trigger_water_pump_cycle.sh")
+    time.sleep(5) # wait
 
 def read_soil():
     moisture_one = automationhat.analog.one.read()
@@ -96,7 +91,7 @@ def update():
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
 
-    if moisture_one < 25 or moisture_two < 25:
+    if moisture_one < 70 or moisture_two < 70:
         water()
 
     # read temp/humidity sensor
