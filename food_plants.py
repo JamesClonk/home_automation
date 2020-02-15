@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import time
+import datetime
 import os
 import Adafruit_DHT
 import automationhat
@@ -92,7 +93,9 @@ def update():
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
 
     if moisture_one < 70 or moisture_two < 70:
-        water()
+        currentDT = datetime.datetime.now()
+        if currentDT.hour > 18 and currentDT.hour < 20:
+            water()
 
     # read temp/humidity sensor
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
