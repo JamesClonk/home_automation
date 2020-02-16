@@ -19,7 +19,12 @@ retry() {
 }
 
 check() {
-    curl -s -o /dev/null -w "%{http_code}" http://192.168.1.160/relay?state=0 | grep 200
+    echo "checking lamp state ..."
+    RELAY_STATE=$(curl -s http://192.168.1.160/report | jq .relay)
+    if [[ "${RELAY_STATE}" != "false" ]]; then
+        echo "lamp is currently on, turning it off ..."
+        curl -s -o /dev/null -w "%{http_code}" http://192.168.1.160/relay?state=0 | grep 200
+    fi
 }
 
 retry 10 check
