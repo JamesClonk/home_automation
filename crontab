@@ -31,11 +31,11 @@
 9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants_lamp_temp.sh >/dev/null 2>&1
 #33 12 * * 0,5,6 . /root/.home-automation; /root/home_automation/trigger_water_pump_cycle.sh >/dev/null 2>&1
 
-0,2,5 7 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_on.sh >/dev/null 2>&1
-45,47,50 10 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_off.sh >/dev/null 2>&1
+0,2,5 8 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_on.sh >/dev/null 2>&1
+45,47,50 11 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_off.sh >/dev/null 2>&1
 44 * * * * . /root/.home-automation; /root/home_automation/turn_air_quality_pump_off.sh >/dev/null 2>&1
 
-0,2,5 2 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
-45,47,50 17 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
+0,2,5 4 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
+45,47,50 19 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
 33 * * * * . /root/.home-automation; /root/home_automation/turn_food_plants_pump_off.sh >/dev/null 2>&1
 
