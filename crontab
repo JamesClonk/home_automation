@@ -33,9 +33,10 @@
 
 0,2,5 8 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_on.sh >/dev/null 2>&1
 45,47,50 11 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_off.sh >/dev/null 2>&1
-44 * * * * . /root/.home-automation; /root/home_automation/turn_air_quality_pump_off.sh >/dev/null 2>&1
+
+1,3,7 4 * * * . /root/.home-automation; /root/home_automation/turn_herb_garden_lamp_on.sh >/dev/null 2>&1
+54,56,58 19 * * * . /root/.home-automation; /root/home_automation/turn_herb_garden_lamp_off.sh >/dev/null 2>&1
 
 0,2,5 4 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
 45,47,50 19 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
-33 * * * * . /root/.home-automation; /root/home_automation/turn_food_plants_pump_off.sh >/dev/null 2>&1
 
