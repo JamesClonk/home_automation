@@ -40,3 +40,6 @@
 0,2,5 4 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
 45,47,50 19 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
 
+20 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_on.sh >/dev/null 2>&1
+50 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_off.sh >/dev/null 2>&1
+
