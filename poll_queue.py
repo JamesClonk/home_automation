@@ -65,13 +65,20 @@ def poll():
             if message["message"] == "toggle" and delete_message(message["id"]):
                 print "./toggle_food_plants_lamp.sh"
                 os.system("./toggle_food_plants_lamp.sh")
-        if message["queue"] == "food_plants_water_pump":
+        if message["queue"] == "food_plants_water_pump_cycle":
             if message["message"] == "on" and delete_message(message["id"]):
                 print "./trigger_water_pump_cycle.sh"
                 os.system("./trigger_water_pump_cycle.sh")
             if message["message"] == "toggle" and delete_message(message["id"]):
                 print "./trigger_water_pump_cycle.sh"
                 os.system("./trigger_water_pump_cycle.sh")
+        if message["queue"] == "food_plants_water_pump_single_burst":
+            if message["message"] == "on" and delete_message(message["id"]):
+                print "./trigger_water_pump_single_burst.sh"
+                os.system("./trigger_water_pump_single_burst.sh")
+            if message["message"] == "toggle" and delete_message(message["id"]):
+                print "./trigger_water_pump_single_burst.sh"
+                os.system("./trigger_water_pump_single_burst.sh")
         if message["queue"] == "herb_garden_light":
             if message["message"] == "on" and delete_message(message["id"]):
                 print "./turn_herb_garden_lamp_on.sh"

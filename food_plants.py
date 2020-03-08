@@ -92,7 +92,7 @@ def update():
     print "curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two)
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
 
-    if moisture_one < 74 or moisture_two < 66:
+    if moisture_one < 74 or moisture_two < 64:
         currentDT = datetime.datetime.now()
         if currentDT.hour > 6 and currentDT.hour < 8 and currentDT.minute < 10:
             water()
