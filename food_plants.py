@@ -94,7 +94,7 @@ def update():
 
     if moisture_one < 74 or moisture_two < 64:
         currentDT = datetime.datetime.now()
-        if currentDT.hour > 6 and currentDT.hour < 8 and currentDT.minute < 10:
+        if currentDT.hour > 6 and currentDT.hour < 8 and currentDT.minute < 12:
             water()
 
     # read temp/humidity sensor
