@@ -64,7 +64,7 @@ def read_soil():
     moisture_two = automationhat.analog.two.read()
 
     print('Air Quality Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
-    moisture_one = cut(map(moisture_one, 1.5, 3.1, 100, 0), 0, 100)
+    moisture_one = cut(map(moisture_one, 1.5, 3.3, 100, 0), 0, 100)
     moisture_two = cut(map(moisture_two, 1.4, 3.1, 100, 0), 0, 100)
     print('Air Quality Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two))
     return moisture_one, moisture_two
@@ -77,10 +77,10 @@ def update():
         time.sleep(3)
         moisture_one, moisture_two = read_soil()
 
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
+    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
+    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
 
     if moisture_one < 25:
         water()
@@ -88,10 +88,10 @@ def update():
     # read temp/humidity sensor
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
     print('Temp: {0:0.1f}C,  Humidity: {1:0.1f}%'.format(temperature, humidity))
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.scapp.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
+    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
+    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
+    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
+    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(humidity), username, password, hum_id))
     
 update()
 
