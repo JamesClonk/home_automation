@@ -45,6 +45,26 @@ def poll():
             if message["message"] == "toggle" and delete_message(message["id"]):
                 print "./toggle_air_quality_lamp.sh"
                 os.system("./toggle_air_quality_lamp.sh")
+        if message["queue"] == "plant_room_fan":
+            if message["message"] == "on" and delete_message(message["id"]):
+                print "./turn_plant_room_fan_on.sh"
+                os.system("./turn_plant_room_fan_on.sh")
+            if message["message"] == "off" and delete_message(message["id"]):
+                print "./turn_plant_room_fan_off.sh"
+                os.system("./turn_plant_room_fan_off.sh")
+            if message["message"] == "toggle" and delete_message(message["id"]):
+                print "./toggle_plant_room_fan.sh"
+                os.system("./toggle_plant_room_fan.sh")
+        if message["queue"] == "plant_room_light":
+            if message["message"] == "on" and delete_message(message["id"]):
+                print "./turn_plant_room_lamp_on.sh"
+                os.system("./turn_plant_room_lamp_on.sh")
+            if message["message"] == "off" and delete_message(message["id"]):
+                print "./turn_plant_room_lamp_off.sh"
+                os.system("./turn_plant_room_lamp_off.sh")
+            if message["message"] == "toggle" and delete_message(message["id"]):
+                print "./toggle_plant_room_lamp.sh"
+                os.system("./toggle_plant_room_lamp.sh")
         if message["queue"] == "food_plants_fan":
             if message["message"] == "on" and delete_message(message["id"]):
                 print "./turn_food_plants_fan_on.sh"
