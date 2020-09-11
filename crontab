@@ -30,6 +30,7 @@
 #*/5 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants.sh >/dev/null 2>&1
 7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_air_quality_lamp_temp.sh >/dev/null 2>&1
 9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants_lamp_temp.sh >/dev/null 2>&1
+11,41 * * * * . /root/.home-automation; /root/home_automation/monitor_plant_room_lamp_temp.sh >/dev/null 2>&1
 #33 4 * * 0,5,6 . /root/.home-automation; /root/home_automation/trigger_water_pump_cycle.sh >/dev/null 2>&1
 
 30,32,35 7 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_on.sh >/dev/null 2>&1
