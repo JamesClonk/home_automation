@@ -7,8 +7,8 @@ import Adafruit_DHT
 import automationhat
 time.sleep(1)
 
-temp_id = 1
-hum_id = 2
+temp_id = 16
+hum_id = 17
 soil_id_one = 12
 soil_id_two = 10
 soil_id_three = 13 # used for an additional air quality plant
@@ -50,9 +50,9 @@ def cut(value, minValue, maxValue):
     return value
 
 def water():
-    print "trigger water pump cycle ..."
-    print "./trigger_water_pump_cycle.sh"
-    os.system("./trigger_water_pump_cycle.sh")
+    # print "trigger water pump cycle ..."
+    # print "./trigger_water_pump_cycle.sh"
+    # os.system("./trigger_water_pump_cycle.sh")
     time.sleep(5) # wait
 
 def read_soil():
