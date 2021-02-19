@@ -1,9 +1,9 @@
 #!/bin/bash
 
-SENSOR_ID=9
+SENSOR_ID=18
 
 while true; do
-  export LAMP_TEMP_LONG=$(curl http://192.168.1.165/temp -s | jq -r '.compensated')
+  export LAMP_TEMP_LONG=$(curl http://192.168.1.164/temp -s | jq -r '.compensated')
   export LAMP_TEMP_SHORT=$(printf "%0.1f" ${LAMP_TEMP_LONG})
   export LAMP_TEMP=$(echo "${LAMP_TEMP_LONG}" | awk '{print int($1);}')
   echo "Temp: ${LAMP_TEMP_SHORT}C (${LAMP_TEMP}°)"
