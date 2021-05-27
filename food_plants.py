@@ -11,7 +11,7 @@ temp_id = 16
 hum_id = 17
 soil_id_one = 12
 soil_id_two = 10
-soil_id_three = 13 # used for an additional air quality plant
+soil_id_three = 13
 username = os.environ['AUTH_USERNAME']
 password = os.environ['AUTH_PASSWORD']
 dht_pin = 8
@@ -60,14 +60,15 @@ def read_soil():
     moisture_two = automationhat.analog.two.read()
     moisture_three = automationhat.analog.three.read()
 
-    print 'Air Quality Plant - Soil Moisture value: {0:0.3f}'.format(moisture_three)
-    moisture_three = cut(map(moisture_three, 1.5, 3.1, 100, 0), 0, 100)
-    print 'Air Quality Plant - Remapped value: {0:0.3f}'.format(moisture_three)
+    #print 'Air Quality Plant - Soil Moisture value: {0:0.3f}'.format(moisture_three)
+    #moisture_three = cut(map(moisture_three, 1.5, 3.1, 100, 0), 0, 100)
+    #print 'Air Quality Plant - Remapped value: {0:0.3f}'.format(moisture_three)
 
-    print 'Food Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
+    print 'Food Plants - Soil Moisture values: {0:0.3f}, {1:0.3f}, {2:0.3f}'.format(moisture_one, moisture_two, moisture_three)
     moisture_one = cut(map(moisture_one, 1.4, 3.1, 100, 0), 0, 100)
-    moisture_two = cut(map(moisture_two, 1.4, 3.1, 100, 0), 0, 100)
-    print 'Food Plants - Remapped values: {0:0.3f}, {1:0.3f}'.format(moisture_one, moisture_two)
+    moisture_two = cut(map(moisture_two, 1.5, 3.1, 100, 0), 0, 100)
+    moisture_three = cut(map(moisture_three, 1.5, 3.1, 100, 0), 0, 100)
+    print 'Food Plants - Remapped values: {0:0.3f}, {1:0.3f}, {2:0.3f}'.format(moisture_one, moisture_two, moisture_three)
 
     return moisture_one, moisture_two, moisture_three
 
