@@ -22,6 +22,15 @@
 # m h  dom mon dow   command
 */15 * * * * . /root/.home-automation; /root/home_automation/monitor_wifi.sh >/dev/null 2>&1
 
+# dnsmasq blocking
+# general unblock
+4 4 * * * /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
+# weekend blocking, sa+su
+13 13 * * 0,6 /root/home_automation/dnsmasq.d/dnsmasq_block.sh >/dev/null 2>&1
+# weekday blocking
+13 13 * * 1,2,3,4,5 /root/home_automation/dnsmasq.d/dnsmasq_block.sh >/dev/null 2>&1
+17 17 * * 1,2,3,4,5 /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
+
 # uncomment if needed
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_living_room.sh >/dev/null 2>&1
 #5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_bedroom.sh >/dev/null 2>&1
