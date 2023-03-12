@@ -24,7 +24,7 @@
 
 # dnsmasq blocking
 # general unblock
-4 4 * * * /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
+15 0 * * * /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
 # weekend blocking, sa+su
 13 13 * * 0,6 /root/home_automation/dnsmasq.d/dnsmasq_block.sh >/dev/null 2>&1
 # weekday blocking
