@@ -10,11 +10,11 @@ import (
 
 var adapter = bluetooth.DefaultAdapter
 
-type Data struct {
-	T int `struc:"uint16,little"`
-	H int `struc:"uint16,little"`
-	C int `struc:"uint16,little"`
-}
+// type Data struct {
+// 	T int `struc:"uint16,little"`
+// 	H int `struc:"uint16,little"`
+// 	C int `struc:"uint16,little"`
+// }
 
 func main() {
 	// Enable BLE interface.
