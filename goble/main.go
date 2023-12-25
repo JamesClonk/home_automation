@@ -2,13 +2,19 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
 	"log"
 	"math"
+	"os"
+	"time"
 
 	"tinygo.org/x/bluetooth"
 )
 
-var adapter = bluetooth.DefaultAdapter
+var (
+	adapter = bluetooth.DefaultAdapter
+	address = "EE:C8:36:2C:CB:39"
+)
 
 // type Data struct {
 // 	T int `struc:"uint16,little"`
@@ -17,30 +23,46 @@ var adapter = bluetooth.DefaultAdapter
 // }
 
 func main() {
-	// Enable BLE interface.
+	arguments := os.Args
+	if len(arguments) == 2 {
+		address = arguments[1]
+	}
+	if len(arguments) > 2 {
+		log.Fatal("USAGE: ./goble <address>")
+	}
+
+	// timeout
+	timeout := time.NewTimer(10 * time.Second)
+	go func() {
+		<-timeout.C
+		log.Fatal("Timeout reached!")
+	}()
+
+	// enable BLE interface
 	must("enable BLE stack", adapter.Enable())
 
-	// Start scanning.
+	// Start scanning
 	log.Println("scanning...")
 	err := adapter.Scan(func(adapter *bluetooth.Adapter, device bluetooth.ScanResult) {
-		//log.Println("found device:", device.Address.String(), device.RSSI, device.LocalName())
-		if device.Address.String() == "EE:C8:36:2C:CB:39" {
-			//log.Println("found device:", device.Address.String(), device.RSSI, device.LocalName())
-			//log.Printf("device data: %v, %v\n", device.AdvertisementPayload.LocalName(), device.AdvertisementPayload.ManufacturerData())
+		//fmt.Println("found device:", device.Address.String(), device.RSSI, device.LocalName())
+		if device.Address.String() == address {
+			//fmt.Println("found device:", device.Address.String(), device.RSSI, device.LocalName())
+			//fmt.Printf("device data: %v, %v\n", device.AdvertisementPayload.LocalName(), device.AdvertisementPayload.ManufacturerData())
 			for _, value := range device.AdvertisementPayload.ManufacturerData() {
-				log.Printf("Temp: %.2f", -45+((175.0*float64(uint64(binary.LittleEndian.Uint16(value[4:6]))))/(math.Pow(2, 16)-1)))
-				log.Printf("Hum: %.2f", (100.0*float64(binary.LittleEndian.Uint16(value[6:8])))/(math.Pow(2, 16)-1))
-				log.Printf("CO2: %d", binary.LittleEndian.Uint16(value[8:10]))
+				fmt.Printf("Temperature: %.2f\n", -45+((175.0*float64(uint64(binary.LittleEndian.Uint16(value[4:6]))))/(math.Pow(2, 16)-1)))
+				fmt.Printf("Humidity: %.2f\n", (100.0*float64(binary.LittleEndian.Uint16(value[6:8])))/(math.Pow(2, 16)-1))
+				fmt.Printf("CO2 ppm: %d\n", binary.LittleEndian.Uint16(value[8:10]))
 
 				// uses "github.com/lunixbochs/struc"
 				// reader := bytes.NewReader(value[4:10])
 				// data := &Data{}
 				// err := struc.Unpack(reader, data)
 				// if err != nil {
-				// 	log.Printf("%v", err.Error())
+				// 	fmt.Printf("%v\n", err.Error())
 				// }
-				// log.Printf("%#v", data)
+				// fmt.Printf("%#v\n", data)
 			}
+			adapter.StopScan()
 		}
 	})
 	must("start scan", err)
