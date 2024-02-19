@@ -1,0 +1,57 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+*/15 * * * * . /root/.home-automation; /root/home_automation/monitor_wifi.sh >/dev/null 2>&1
+22 3 * * * reboot >/dev/null 2>&1
+
+# uncomment if needed
+5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_poll_queue.sh >/dev/null 2>&1
+*/5 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants.sh >/dev/null 2>&1
+7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_air_quality_lamp_temp.sh >/dev/null 2>&1
+9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_food_plants_lamp_temp.sh >/dev/null 2>&1
+11,41 * * * * . /root/.home-automation; /root/home_automation/monitor_plant_room_lamp_temp.sh >/dev/null 2>&1
+13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_bedroom_lamp_temp.sh >/dev/null 2>&1
+17,47 * * * * . /root/.home-automation; /root/home_automation/monitor_co2_sensor.sh >/dev/null 2>&1
+#22 15 * * * . /root/.home-automation; /root/home_automation/trigger_water_pump_single_burst.sh >/dev/null 2>&1
+#22 5 * * * . /root/.home-automation; /root/home_automation/trigger_water_pump_cycle.sh >/dev/null 2>&1
+
+33,36,37 7 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_on.sh >/dev/null 2>&1
+52,53,55 11 * * * . /root/.home-automation; /root/home_automation/turn_air_quality_lamp_off.sh >/dev/null 2>&1
+
+#33,36,37 4 * * * . /root/.home-automation; /root/home_automation/turn_herb_garden_lamp_on.sh >/dev/null 2>&1
+#52,53,55 19 * * * . /root/.home-automation; /root/home_automation/turn_herb_garden_lamp_off.sh >/dev/null 2>&1
+
+01 11 * * * . /root/.home-automation; /root/home_automation/turn_bedroom_lamp_on.sh >/dev/null 2>&1
+14 23 * * * . /root/.home-automation; /root/home_automation/turn_bedroom_lamp_off.sh >/dev/null 2>&1
+
+26,27,28 5 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_lamp_on.sh >/dev/null 2>&1
+48,49,51 19 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_lamp_off.sh >/dev/null 2>&1
+
+22,24 6-19 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_fan_on.sh >/dev/null 2>&1
+48,50 6-19 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_fan_off.sh >/dev/null 2>&1
+
+0,2,5 5 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
+51,52,53 18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
+
+20,21 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_on.sh >/dev/null 2>&1
+50,51 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_off.sh >/dev/null 2>&1
+
