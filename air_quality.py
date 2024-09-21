@@ -71,19 +71,19 @@ def read_soil():
 
 def update():
     # read soil moisture
-    moisture_one, moisture_two = read_soil()
-    if moisture_one <= 1 or moisture_two <= 1:
-        # reread
-        time.sleep(3)
-        moisture_one, moisture_two = read_soil()
+    #moisture_one, moisture_two = read_soil()
+    #if moisture_one <= 1 or moisture_two <= 1:
+    #    # reread
+    #    time.sleep(3)
+    #    moisture_one, moisture_two = read_soil()
 
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
-    print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
-    os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+    #print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
+    #os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_one), username, password, soil_id_one))
+    #print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
+    #os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(moisture_two), username, password, soil_id_two))
 
-    if moisture_one < 25:
-        water()
+    #if moisture_one < 25:
+    #    water()
 
     # read temp/humidity sensor
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
