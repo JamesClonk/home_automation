@@ -37,5 +37,5 @@
 5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_basement.sh >/dev/null 2>&1
 7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_ht.sh >/dev/null 2>&1
 8,38 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_gallery_ht.sh >/dev/null 2>&1
-9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_ht.sh >/dev/null 2>&1
+#9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_ht.sh >/dev/null 2>&1
 
