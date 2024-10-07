@@ -6,8 +6,8 @@ CO2_SENSOR_ID=22
 
 while true; do
   export GOBLE_OUTPUT=$(goble EE:C8:36:2C:CB:39 2>/dev/null)
-  export TEMP=$(echo "${GOBLE_OUTPUT}" | grep 'Temperature' | awk '{print int($2);}')
-  export HUM=$(echo "${GOBLE_OUTPUT}" | grep 'Humidity' | awk '{print int($2)+5;}')
+  export TEMP=$(echo "${GOBLE_OUTPUT}" | grep 'Temperature' | awk '{print int($2)-1;}')
+  export HUM=$(echo "${GOBLE_OUTPUT}" | grep 'Humidity' | awk '{print int($2)+6;}')
   export CO2_PPM=$(echo "${GOBLE_OUTPUT}" | grep 'CO2' | awk '{print $3;}')
   echo "Temperature: ${TEMP}°C"
   echo "Humidity: ${HUM}% RH"
