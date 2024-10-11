@@ -103,3 +103,7 @@ ENV/
 goble/goble
 goble/goble.gz
 
+# secrets
+secrets.h
+.home-automation
+
