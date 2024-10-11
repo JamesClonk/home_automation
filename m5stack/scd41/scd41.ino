@@ -1,10 +1,7 @@
 #include <M5AtomS3.h>
 #include <M5UnitENV.h>
 #include <WiFi.h>
-
-// wifi stuff
-const char* wifiSSID = "blub";
-const char* wifiPassword = "blub";
+#include "secrets.h"
 
 // sensor relevant stuff
 SCD4X scd4x;
@@ -78,7 +75,7 @@ void loop() {
 bool checkWifi() {
   if (WiFi.status() != WL_CONNECTED) {
     reportProgress("connecting to Wifi ...");
-    WiFi.begin(wifiSSID, wifiPassword);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
     uint32_t timeout = millis();
     while (millis() < timeout + 22222) {
