@@ -3,8 +3,8 @@
 #include <WiFi.h>
 
 // wifi stuff
-const char* wifiSSID = "<GrandioseNetwork>";
-const char* wifiPassword = "<password>";
+const char* wifiSSID = "blub";
+const char* wifiPassword = "blub";
 
 // sensor relevant stuff
 SCD4X scd4x;
@@ -26,7 +26,9 @@ void setup() {
 
   // setup CO2 unit
   if (!scd4x.begin(&Wire, SCD4X_I2C_ADDR, 2, 1, 400000U)) {
-    Serial.println("could not find SCD4X");
+    silentMode = false;
+    permanentError = true;
+    reportError("could not find SCD4X");
     while (true) delay(1000);  // block endlessly here, no point in continuing if CO2 unit was not found! Hard reset of AtomS3 device required!
   }
   scd4x.stopPeriodicMeasurement();
@@ -55,7 +57,7 @@ void loop() {
     if (AtomS3.BtnA.wasPressed()) {
       silentMode = !silentMode;  // toggle silent mode (aka the LED's)
 
-      reportProgress("button A was pressed, awaiting measurement ...");
+      Serial.println("button A was pressed ...");
       runCollection();
       break;
     }
@@ -107,6 +109,8 @@ bool checkWifi() {
 }
 
 void runCollection() {
+  reportProgress("awaiting measurement ...");
+
   bool measurement = false;
   uint32_t timeout = millis();
   while (millis() < timeout + 5000) {
@@ -169,7 +173,7 @@ void reportSuccess(const char* msg) {
 
 void reportError(const char* msg) {
   Serial.println(msg);
-  if (!silentMode) {
+  if (!silentMode || permanentError) {
     AtomS3.dis.drawpix(0xff0000);
     AtomS3.update();
   }
