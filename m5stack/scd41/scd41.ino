@@ -251,6 +251,7 @@ bool httpUpload(String sensorId, uint32_t sensorValue) {
       if (httpCode > 0) {
         const String response = httpsClient.getString();
         if (httpCode == HTTP_CODE_CREATED) {  // home-info responds with StatusCreated|201 if okay
+          Serial.println("[HTTPS] POST done");
           failed = false;
         } else {
           Serial.println(response);
@@ -291,7 +292,6 @@ bool setClockViaNTP() {
   gmtime_r(&now, &timeinfo);
   Serial.print("Current time: ");
   Serial.print(asctime(&timeinfo));
-  Serial.println();
   return true;
 }
 
