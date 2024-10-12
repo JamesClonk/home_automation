@@ -14,9 +14,9 @@
 */
 
 // home-info sensor IDs
-String sensorIdCO2 = "22";
-String sensorIdTemp = "25";
-String sensorIdHum = "26";
+const String sensorIdCO2 = "22";
+const String sensorIdTemp = "25";
+const String sensorIdHum = "26";
 
 // sensor values
 uint16_t ppm = 0;
@@ -28,7 +28,7 @@ SCD4X scd4x;
 uint32_t errorCounter = 0;
 bool silentMode = true;
 bool permanentError = false;
-bool httpUploadEnabled = true;
+const bool httpUploadEnabled = true;
 
 // report cycle
 uint32_t lastUpdate;
@@ -75,7 +75,7 @@ void setup() {
   AtomS3.dis.drawpix(0x000000);
 
   Serial.begin(9600);
-  Serial.println(F("starting ..."));
+  Serial.println("starting ...");
 
   // setup CO2 unit
   if (!scd4x.begin(&Wire, SCD4X_I2C_ADDR, 2, 1, 400000U)) {
@@ -110,7 +110,7 @@ void loop() {
     if (AtomS3.BtnA.wasPressed()) {
       silentMode = !silentMode;  // toggle silent mode (aka the LED's)
 
-      Serial.println(F("button A was pressed ..."));
+      Serial.println("button A was pressed ...");
       runCollection();
       break;
     }
@@ -133,21 +133,21 @@ bool checkWifi() {
     reportProgress("connecting to Wifi ...");
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-    uint32_t timeout = millis();
+    const uint32_t timeout = millis();
     while (millis() < timeout + 22222) {
       if (WiFi.status() == WL_CONNECTED) {
         break;
       }
-      Serial.print(F("."));
+      Serial.print(".");
       delay(666);
     }
 
     if (WiFi.status() == WL_CONNECTED) {
       reportSuccess("connected to Wifi:");
       Serial.println(WiFi.SSID());
-      Serial.print(F("IP address: "));
+      Serial.print("IP address: ");
       Serial.println(WiFi.localIP());
-      Serial.print(F("RSSI: "));
+      Serial.print("RSSI: ");
       Serial.println(WiFi.RSSI());
       delay(2000);
       return true;
@@ -164,15 +164,15 @@ bool checkWifi() {
 void runCollection() {
   reportProgress("running data collection ...");
 
-  Serial.println(F("awaiting measurement ..."));
+  Serial.println("awaiting measurement ...");
   bool measurement = false;
-  uint32_t timeout = millis();
+  const uint32_t timeout = millis();
   while (millis() < timeout + 5000) {
     if (scd4x.update()) {
       measurement = true;
       break;
     }
-    Serial.print(F("."));
+    Serial.print(".");
     delay(333);
   }
   Serial.println();
@@ -182,19 +182,24 @@ void runCollection() {
     ppm = scd4x.getCO2();
     temp = scd4x.getTemperature() - 1;
     hum = scd4x.getHumidity() + 2;
-    Serial.print(F("CO2(ppm): "));
+    Serial.print("CO2(ppm): ");
     Serial.print(ppm);
-    Serial.print(F("\tTemperature(C): "));
+    Serial.print("\tTemperature(C): ");
     Serial.print(temp, 1);
-    Serial.print(F("\tHumidity(%RH): "));
+    Serial.print("\tHumidity(%RH): ");
     Serial.print(hum, 1);
     Serial.println();
 
     // send data via HTTP API
     if (httpUploadEnabled) {
-      if (httpUpload()) {
+      bool upload = true;  // using a bool-var, because we want all httpUpload functions to always run, regardless if one of them fails
+      upload = httpUpload(sensorIdCO2, ppm) && upload;
+      upload = httpUpload(sensorIdTemp, temp) && upload;
+      upload = httpUpload(sensorIdHum, hum) && upload;
+      if (upload) {
         reportSuccess("http upload successful!");
       } else {
+        // it failed :(
         reportError("http upload has failed!");
       }
     } else {
@@ -210,7 +215,9 @@ void runCollection() {
   lastUpdate = millis();
 }
 
-bool httpUpload() {
+bool httpUpload(String sensorId, uint32_t sensorValue) {
+  reportProgress("doing HTTP upload ...");
+
   // correct time is required for certificate validation
   if (!setClockViaNTP()) {
     return false;
@@ -227,24 +234,26 @@ bool httpUpload() {
   {
     // scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure
     HTTPClient httpsClient;
-    String url = "https://home-info.jamesclonk.io/sensor/" + sensorIdCO2 + "/value";
+    const String url = "https://home-info.jamesclonk.io/sensor/" + sensorId + "/value";
 
-    Serial.println(F("[HTTPS] begin ..."));
+    Serial.println("[HTTPS] begin ...");
     if (httpsClient.begin(wifiClient, url)) {
       httpsClient.setAuthorization(HOME_INFO_USER, HOME_INFO_PASSWORD);
       httpsClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-      String payload = "value=" + ppm;
-      Serial.printf("[HTTPS] POST to: %s?%s\n", url.c_str(), payload.c_str());
-      int httpCode = httpsClient.POST(payload);
+      char data[16];
+      sprintf(data, "value=%u", sensorValue);
+      Serial.printf("[HTTPS] POST to: %s\n", url.c_str());
+      Serial.printf("[HTTPS] POST data: %s\n", data);
 
+      const int httpCode = httpsClient.POST(data);
       Serial.printf("[HTTPS] POST, response code: %d\n", httpCode);
       if (httpCode > 0) {
-        String response = httpsClient.getString();
-        Serial.println(response);
+        const String response = httpsClient.getString();
         if (httpCode == HTTP_CODE_CREATED) {  // home-info responds with StatusCreated|201 if okay
           failed = false;
         } else {
+          Serial.println(response);
           failed = true;
         }
       } else {
@@ -254,7 +263,7 @@ bool httpUpload() {
 
       httpsClient.end();
     } else {
-      Serial.println(F("[HTTPS] unable to connect!"));
+      Serial.println("[HTTPS] unable to connect!");
       failed = true;
     }
   }
@@ -265,22 +274,22 @@ bool httpUpload() {
 bool setClockViaNTP() {
   configTime(0, 0, "pool.ntp.org", "ntp.metas.ch", "time.nist.gov");  // utc
 
-  Serial.print(F("awaiting NTP sync ..."));
-  uint32_t timeout = millis();
+  Serial.print("awaiting NTP sync ...");
+  const uint32_t timeout = millis();
   time_t now = time(nullptr);
   while (now < 8 * 3600 * 2) {
     if (millis() > timeout + 30000) {  // 30s timeout
       return false;
     }
     now = time(nullptr);
-    Serial.print(F("."));
+    Serial.print(".");
     delay(666);
   }
 
   Serial.println();
   struct tm timeinfo;
   gmtime_r(&now, &timeinfo);
-  Serial.print(F("Current time: "));
+  Serial.print("Current time: ");
   Serial.print(asctime(&timeinfo));
   Serial.println();
   return true;
