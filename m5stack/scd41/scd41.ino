@@ -14,9 +14,9 @@
 */
 
 // home-info sensor IDs
-uint32_t sensorIdCO2 = 22;
-uint32_t sensorIdTemp = 25;
-uint32_t sensorIdHum = 26;
+String sensorIdCO2 = "22";
+String sensorIdTemp = "25";
+String sensorIdHum = "26";
 
 // sensor values
 uint16_t ppm = 0;
@@ -75,13 +75,13 @@ void setup() {
   AtomS3.dis.drawpix(0x000000);
 
   Serial.begin(9600);
-  Serial.println("starting ...");
+  Serial.println(F("starting ..."));
 
   // setup CO2 unit
   if (!scd4x.begin(&Wire, SCD4X_I2C_ADDR, 2, 1, 400000U)) {
     silentMode = false;
     permanentError = true;
-    reportError("could not find SCD4X");
+    reportError("could not find SCD41");
     while (true) delay(1000);  // block endlessly here, no point in continuing if CO2 unit was not found! Hard reset of AtomS3 device required!
   }
   scd4x.stopPeriodicMeasurement();
@@ -110,7 +110,7 @@ void loop() {
     if (AtomS3.BtnA.wasPressed()) {
       silentMode = !silentMode;  // toggle silent mode (aka the LED's)
 
-      Serial.println("button A was pressed ...");
+      Serial.println(F("button A was pressed ..."));
       runCollection();
       break;
     }
@@ -145,9 +145,9 @@ bool checkWifi() {
     if (WiFi.status() == WL_CONNECTED) {
       reportSuccess("connected to Wifi:");
       Serial.println(WiFi.SSID());
-      Serial.print("IP address: ");
+      Serial.print(F("IP address: "));
       Serial.println(WiFi.localIP());
-      Serial.print("RSSI: ");
+      Serial.print(F("RSSI: "));
       Serial.println(WiFi.RSSI());
       delay(2000);
       return true;
@@ -164,7 +164,7 @@ bool checkWifi() {
 void runCollection() {
   reportProgress("running data collection ...");
 
-  Serial.println("awaiting measurement ...");
+  Serial.println(F("awaiting measurement ..."));
   bool measurement = false;
   uint32_t timeout = millis();
   while (millis() < timeout + 5000) {
@@ -230,9 +230,9 @@ bool httpUpload() {
     httpsClient.setAuthorization(HOME_INFO_USER, HOME_INFO_PASSWORD);
     String url = "https://home-info.jamesclonk.io/sensor/" + sensorIdCO2 + "/value";
 
-    Serial.println("[HTTPS] begin ...");
-    if (httpsClient.begin(*wifiClient, url)) {
-      Serial.println("[HTTPS] POST ...");
+    Serial.println(F("[HTTPS] begin ..."));
+    if (httpsClient.begin(wifiClient, url)) {
+      Serial.println(F("[HTTPS] POST ..."));
       int httpCode = httpsClient.POST("value=" + ppm);
 
       Serial.printf("[HTTPS] POST, response code: %d\n", httpCode);
@@ -251,7 +251,7 @@ bool httpUpload() {
 
       httpsClient.end();
     } else {
-      Serial.println("[HTTPS] unable to connect!");
+      Serial.println(F("[HTTPS] unable to connect!"));
       failed = true;
     }
   }
@@ -270,16 +270,16 @@ bool setClockViaNTP() {
       return false;
     }
     now = time(nullptr);
-    Serial.print(".");
+    Serial.print(F("."));
     delay(666);
   }
 
-  Serial.println("");
+  Serial.println();
   struct tm timeinfo;
   gmtime_r(&now, &timeinfo);
-  Serial.print("Current time: ");
+  Serial.print(F("Current time: "));
   Serial.print(asctime(&timeinfo));
-  Serial.println("");
+  Serial.println();
   return true;
 }
 
