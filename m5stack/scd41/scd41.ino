@@ -183,7 +183,7 @@ void runCollection() {
     // it worked, we can read new measurement data now!
     ppm = scd4x.getCO2();
     temp = scd4x.getTemperature() - 1;
-    hum = scd4x.getHumidity() + 2;
+    hum = scd4x.getHumidity() + 1;
     Serial.print("CO2(ppm): ");
     Serial.print(ppm);
     Serial.print("\tTemperature(C): ");
