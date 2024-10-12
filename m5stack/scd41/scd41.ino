@@ -150,14 +150,16 @@ bool checkWifi() {
       Serial.print("RSSI: ");
       Serial.println(WiFi.RSSI());
       delay(2000);
-      return true;
+      reportSilence();
     }
   }
+
   if (WiFi.status() != WL_CONNECTED) {
     reportError("could not connect to Wifi!");
     delay(2000);
     return false;
   }
+
   return true;
 }
 
