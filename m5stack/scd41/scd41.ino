@@ -81,7 +81,7 @@ void setup() {
   if (!scd4x.begin(&Wire, SCD4X_I2C_ADDR, 2, 1, 400000U)) {
     silentMode = false;
     permanentError = true;
-    reportError("could not find SCD41");
+    reportError("could not find SCD41!");
     while (true) delay(1000);  // block endlessly here, no point in continuing if CO2 unit was not found! Hard reset of AtomS3 device required!
   }
   scd4x.stopPeriodicMeasurement();
@@ -218,6 +218,7 @@ bool httpUpload() {
 
   WiFiClientSecure wifiClient;
   wifiClient.setCACert(rootCACertificate);
+  // client.setInsecure(); // alternative, comment out setCACert if used
 
   // timeout for TLS handling, in seconds
   wifiClient.setTimeout(15);
@@ -226,20 +227,22 @@ bool httpUpload() {
   {
     // scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure
     HTTPClient httpsClient;
-
-    httpsClient.setAuthorization(HOME_INFO_USER, HOME_INFO_PASSWORD);
     String url = "https://home-info.jamesclonk.io/sensor/" + sensorIdCO2 + "/value";
 
     Serial.println(F("[HTTPS] begin ..."));
     if (httpsClient.begin(wifiClient, url)) {
-      Serial.println(F("[HTTPS] POST ..."));
-      int httpCode = httpsClient.POST("value=" + ppm);
+      httpsClient.setAuthorization(HOME_INFO_USER, HOME_INFO_PASSWORD);
+      httpsClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      String payload = "value=" + ppm;
+      Serial.printf("[HTTPS] POST to: %s?%s\n", url.c_str(), payload.c_str());
+      int httpCode = httpsClient.POST(payload);
 
       Serial.printf("[HTTPS] POST, response code: %d\n", httpCode);
       if (httpCode > 0) {
         String response = httpsClient.getString();
         Serial.println(response);
-        if (httpCode == 201) {  // home-info responds with HTTP STATUS_CREATED if okay
+        if (httpCode == HTTP_CODE_CREATED) {  // home-info responds with StatusCreated|201 if okay
           failed = false;
         } else {
           failed = true;
