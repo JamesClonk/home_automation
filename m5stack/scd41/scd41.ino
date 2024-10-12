@@ -14,24 +14,24 @@
 */
 
 // home-info sensor IDs
-const String sensorIdCO2 = "22";
-const String sensorIdTemp = "25";
-const String sensorIdHum = "26";
+const String sensorIdCO2 = "31"; // bedroom CO2
+const String sensorIdTemp = "4"; // bedroom temperature
+const String sensorIdHum = "5"; // bedroom humidity
 
 // sensor values
-uint16_t ppm = 0;
-uint16_t temp = 0;
-uint16_t hum = 0;
+float ppm = 0;
+float temp = 0;
+float hum = 0;
 
 // sensor relevant stuff
 SCD4X scd4x;
-uint32_t errorCounter = 0;
+int errorCounter = 0;
 bool silentMode = true;
 bool permanentError = false;
 const bool httpUploadEnabled = true;
 
 // report cycle
-uint32_t lastUpdate;
+unsigned long lastUpdate;
 
 // TLS stuff
 // lets-encrypt ISRG Root X1 pem
@@ -133,7 +133,7 @@ bool checkWifi() {
     reportProgress("connecting to Wifi ...");
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-    const uint32_t timeout = millis();
+    const unsigned long timeout = millis();
     while (millis() < timeout + 22222) {
       if (WiFi.status() == WL_CONNECTED) {
         break;
@@ -168,7 +168,7 @@ void runCollection() {
 
   Serial.println("awaiting measurement ...");
   bool measurement = false;
-  const uint32_t timeout = millis();
+  const unsigned long timeout = millis();
   while (millis() < timeout + 5000) {
     if (scd4x.update()) {
       measurement = true;
@@ -217,7 +217,7 @@ void runCollection() {
   lastUpdate = millis();
 }
 
-bool httpUpload(String sensorId, uint32_t sensorValue) {
+bool httpUpload(String sensorId, float sensorValue) {
   reportProgress("doing HTTP upload ...");
 
   // correct time is required for certificate validation
@@ -244,7 +244,7 @@ bool httpUpload(String sensorId, uint32_t sensorValue) {
       httpsClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
       char data[16];
-      sprintf(data, "value=%u", sensorValue);
+      sprintf(data, "value=%.0f", sensorValue);
       Serial.printf("[HTTPS] POST to: %s\n", url.c_str());
       Serial.printf("[HTTPS] POST data: %s\n", data);
 
@@ -278,7 +278,7 @@ bool setClockViaNTP() {
   configTime(0, 0, "pool.ntp.org", "ntp.metas.ch", "time.nist.gov");  // utc
 
   Serial.print("awaiting NTP sync ...");
-  const uint32_t timeout = millis();
+  const unsigned long timeout = millis();
   time_t now = time(nullptr);
   while (now < 8 * 3600 * 2) {
     if (millis() > timeout + 30000) {  // 30s timeout
