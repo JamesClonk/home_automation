@@ -1,16 +1,72 @@
 #include <M5AtomS3.h>
 #include <M5UnitENV.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
+#include <time.h>
 #include "secrets.h"
+
+/* secrets.h to contain:
+#define WIFI_SSID "*****"
+#define WIFI_PASSWORD "*****"
+#define HOME_INFO_USER "*****"
+#define HOME_INFO_PASSWORD "*****"
+*/
+
+// home-info sensor IDs
+uint32_t sensorIdCO2 = 22;
+uint32_t sensorIdTemp = 25;
+uint32_t sensorIdHum = 26;
+
+// sensor values
+uint16_t ppm = 0;
+uint16_t temp = 0;
+uint16_t hum = 0;
 
 // sensor relevant stuff
 SCD4X scd4x;
 uint32_t errorCounter = 0;
 bool silentMode = true;
 bool permanentError = false;
+bool httpUploadEnabled = true;
 
 // report cycle
 uint32_t lastUpdate;
+
+// TLS stuff
+// lets-encrypt ISRG Root X1 pem
+const char* rootCACertificate =
+  "-----BEGIN CERTIFICATE-----\n"
+  "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\n"
+  "-----END CERTIFICATE-----\n";
 
 void setup() {
   AtomS3.begin(true);  // init, bool ledEnable
@@ -60,7 +116,7 @@ void loop() {
     }
 
     // PERIODIC DATA COLLECTION
-    if (millis() > lastUpdate + (1000*60*10)) { // every 10 minutes
+    if (millis() > lastUpdate + (1000 * 60 * 10)) {  // every 10 minutes
       runCollection();
       break;
     }
@@ -106,8 +162,9 @@ bool checkWifi() {
 }
 
 void runCollection() {
-  reportProgress("awaiting measurement ...");
+  reportProgress("running data collection ...");
 
+  Serial.println("awaiting measurement ...");
   bool measurement = false;
   uint32_t timeout = millis();
   while (millis() < timeout + 5000) {
@@ -122,16 +179,27 @@ void runCollection() {
 
   if (measurement) {
     // it worked, we can read new measurement data now!
-    uint16_t ppm = scd4x.getCO2();
-    uint16_t temp = scd4x.getTemperature();
-    uint16_t hum = scd4x.getHumidity();
+    ppm = scd4x.getCO2();
+    temp = scd4x.getTemperature() - 1;
+    hum = scd4x.getHumidity() + 2;
     Serial.print(F("CO2(ppm): "));
     Serial.print(ppm);
     Serial.print(F("\tTemperature(C): "));
     Serial.print(temp, 1);
     Serial.print(F("\tHumidity(%RH): "));
     Serial.print(hum, 1);
-    reportSuccess("");
+    Serial.println();
+
+    // send data via HTTP API
+    if (httpUploadEnabled) {
+      if (httpUpload()) {
+        reportSuccess("http upload successful!");
+      } else {
+        reportError("http upload has failed!");
+      }
+    } else {
+      reportSuccess("");
+    }
   } else {
     // it failed :(
     reportError("measurement has failed!");
@@ -140,6 +208,79 @@ void runCollection() {
   delay(2000);
   reportSilence();
   lastUpdate = millis();
+}
+
+bool httpUpload() {
+  // correct time is required for certificate validation
+  if (!setClockViaNTP()) {
+    return false;
+  }
+
+  WiFiClientSecure wifiClient;
+  wifiClient.setCACert(rootCACertificate);
+
+  // timeout for TLS handling, in seconds
+  wifiClient.setTimeout(15);
+
+  bool failed = false;
+  {
+    // scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure
+    HTTPClient httpsClient;
+
+    httpsClient.setAuthorization(HOME_INFO_USER, HOME_INFO_PASSWORD);
+    String url = "https://home-info.jamesclonk.io/sensor/" + sensorIdCO2 + "/value";
+
+    Serial.println("[HTTPS] begin ...");
+    if (httpsClient.begin(*wifiClient, url)) {
+      Serial.println("[HTTPS] POST ...");
+      int httpCode = httpsClient.POST("value=" + ppm);
+
+      Serial.printf("[HTTPS] POST, response code: %d\n", httpCode);
+      if (httpCode > 0) {
+        String response = httpsClient.getString();
+        Serial.println(response);
+        if (httpCode == 201) {  // home-info responds with HTTP STATUS_CREATED if okay
+          failed = false;
+        } else {
+          failed = true;
+        }
+      } else {
+        Serial.printf("[HTTPS] POST... failed, error: %s\n", httpsClient.errorToString(httpCode).c_str());
+        failed = true;
+      }
+
+      httpsClient.end();
+    } else {
+      Serial.println("[HTTPS] unable to connect!");
+      failed = true;
+    }
+  }
+
+  return !failed;
+}
+
+bool setClockViaNTP() {
+  configTime(0, 0, "pool.ntp.org", "ntp.metas.ch", "time.nist.gov");  // utc
+
+  Serial.print(F("awaiting NTP sync ..."));
+  uint32_t timeout = millis();
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {
+    if (millis() > timeout + 30000) {  // 30s timeout
+      return false;
+    }
+    now = time(nullptr);
+    Serial.print(".");
+    delay(666);
+  }
+
+  Serial.println("");
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+  Serial.print("Current time: ");
+  Serial.print(asctime(&timeinfo));
+  Serial.println("");
+  return true;
 }
 
 void reportSilence() {
