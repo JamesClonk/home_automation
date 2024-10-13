@@ -198,8 +198,8 @@ void runCollection() {
     // it worked, we can read new measurement data now!
     hpa = bmp.pressure / 100;
     alt = bmp.altitude;
-    temp = bmp.cTemp-1;  // seems more reliable than: sht4.cTemp;
-    hum = sht4.humidity+1;
+    temp = bmp.cTemp;  // seems more reliable than: sht4.cTemp;
+    hum = sht4.humidity;
     Serial.print("-----SHT4X-----\n");
     Serial.print("Temperature(C): ");
     Serial.print(sht4.cTemp, 1);
