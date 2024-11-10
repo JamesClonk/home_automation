@@ -31,6 +31,7 @@ def cut(value, minValue, maxValue):
 def update():
     # read temp/humidity sensor
     humidity, temperature = Adafruit_DHT.read_retry(sensor, dht_pin)
+    temperature = temperature - 1.0
     print('Temp: {0:0.1f}C,  Humidity: {1:0.1f}%'.format(temperature, humidity))
     print("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
     os.system("curl -X POST -d 'value={0:0d}' -u {1}:{2} https://home-info.jamesclonk.io/sensor/{3}/value".format(int(temperature), username, password, temp_id))
