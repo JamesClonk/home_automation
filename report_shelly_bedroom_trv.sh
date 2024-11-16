@@ -18,6 +18,6 @@ while true; do
     curl -X POST -d "value=${SHELLY_VALVE_POS}" -u "${AUTH_USERNAME}:${AUTH_PASSWORD}" "https://home-info.jamesclonk.io/sensor/${SENSOR_ID}/value"
   fi
 
-  sleep 444
+  sleep 666
 done
 
