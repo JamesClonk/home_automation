@@ -45,10 +45,10 @@ if (( ${CURRENT_WIND_SPEED} > 6 )); then
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
     if (( ${SHELLY_DATA} < 70 )); then # if somewhere between 1 and 69% open
       echo "fully closing kitchen blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
     elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
       echo "fully opening kitchen blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
     fi
     sleep 5
   fi
@@ -59,10 +59,10 @@ if (( ${CURRENT_WIND_SPEED} > 6 )); then
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
     if (( ${SHELLY_DATA} < 70 )); then # if somewhere between 1 and 69% open
       echo "fully closing gallery blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
     elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
       echo "fully opening gallery blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
     fi
     sleep 5
   fi
@@ -75,10 +75,10 @@ if (( ${CURRENT_WIND_SPEED} > 9 )); then
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
     if (( ${SHELLY_DATA} < 30 )); then # if somewhere between 1 and 29% open
       echo "fully closing balcony blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
     elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
       echo "fully opening balcony blinds ..."
-      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
     fi
     sleep 5
   fi
