@@ -15,20 +15,28 @@ echo "Current wind speed: ${CURRENT_WIND_SPEED} m/s"
 
 if (( ${CURRENT_WIND_SPEED} > 3 )); then
   echo "have to close awning ..."
-  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos')
+  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
-  if [[ "${SHELLY_DATA}" != "100" ]]; then
+  if (( ${SHELLY_DATA} < 100 )); then # 100% for awning means fully retracted
+    echo "fully retracting awning ..."
     curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
     sleep 5
   fi
 fi
 
-if (( ${CURRENT_WIND_SPEED} > 6 )); then
+if (( ${CURRENT_WIND_SPEED} > 3 )); then
   echo "have to close outside blinds ..."
-  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos')
+
+  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
-  if [[ "${SHELLY_DATA}" != "0" ]]; then
-    curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+  if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
+    if (( ${SHELLY_DATA} < 70 )); then # if somewhere between 1 and 69% open
+      echo "fully closing office blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+    elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
+      echo "fully opening office blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+    fi
     sleep 5
   fi
 
