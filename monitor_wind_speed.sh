@@ -14,7 +14,7 @@ export CURRENT_WIND_SPEED=$(curl -s ${WIND_SPEED_SENSOR_URL} | jq -r '.[0].value
 echo "Current wind speed: ${CURRENT_WIND_SPEED} m/s"
 
 if (( ${CURRENT_WIND_SPEED} > 3 )); then
-  echo "have to close awning ..."
+  echo "have to protect awning ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} < 100 )); then # 100% for awning means fully retracted
@@ -25,7 +25,7 @@ if (( ${CURRENT_WIND_SPEED} > 3 )); then
 fi
 
 if (( ${CURRENT_WIND_SPEED} > 6 )); then
-  echo "have to close office blinds ..."
+  echo "have to protect office blinds ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
@@ -39,7 +39,7 @@ if (( ${CURRENT_WIND_SPEED} > 6 )); then
     sleep 5
   fi
 
-  echo "have to close kitchen blinds ..."
+  echo "have to protect kitchen blinds ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
@@ -53,7 +53,7 @@ if (( ${CURRENT_WIND_SPEED} > 6 )); then
     sleep 5
   fi
 
-  echo "have to close gallery blinds ..."
+  echo "have to protect gallery blinds ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
@@ -69,7 +69,7 @@ if (( ${CURRENT_WIND_SPEED} > 6 )); then
 fi
 
 if (( ${CURRENT_WIND_SPEED} > 9 )); then
-  echo "have to close balcony blinds ..."
+  echo "have to protect balcony blinds ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
