@@ -24,9 +24,8 @@ if (( ${CURRENT_WIND_SPEED} > 3 )); then
   fi
 fi
 
-if (( ${CURRENT_WIND_SPEED} > 3 )); then
-  echo "have to close outside blinds ..."
-
+if (( ${CURRENT_WIND_SPEED} > 6 )); then
+  echo "have to close office blinds ..."
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
   if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
@@ -40,28 +39,47 @@ if (( ${CURRENT_WIND_SPEED} > 3 )); then
     sleep 5
   fi
 
-  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos')
+  echo "have to close kitchen blinds ..."
+  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
-  if [[ "${SHELLY_DATA}" != "0" ]]; then
-    curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_KITCHEN_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+  if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
+    if (( ${SHELLY_DATA} < 70 )); then # if somewhere between 1 and 69% open
+      echo "fully closing kitchen blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+    elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
+      echo "fully opening kitchen blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+    fi
     sleep 5
   fi
 
-  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos')
+  echo "have to close gallery blinds ..."
+  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
-  if [[ "${SHELLY_DATA}" != "0" ]]; then
-    curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_GALLERY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+  if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
+    if (( ${SHELLY_DATA} < 70 )); then # if somewhere between 1 and 69% open
+      echo "fully closing gallery blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+    elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
+      echo "fully opening gallery blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+    fi
     sleep 5
   fi
 fi
 
 if (( ${CURRENT_WIND_SPEED} > 9 )); then
   echo "have to close balcony blinds ..."
-  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos')
+  SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
-  if [[ "${SHELLY_DATA}" != "0" ]]; then
-    curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_BALCONY_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+  if (( ${SHELLY_DATA} > 0 )); then # is it not fully closed?
+    if (( ${SHELLY_DATA} < 30 )); then # if somewhere between 1 and 29% open
+      echo "fully closing balcony blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=0"
+    elif (( ${SHELLY_DATA} < 100 )); then # if not fully open (100%)
+      echo "fully opening balcony blinds ..."
+      curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_OFFICE_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=100"
+    fi
     sleep 5
   fi
 fi
-
