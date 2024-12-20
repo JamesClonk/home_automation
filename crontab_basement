@@ -35,7 +35,11 @@
 
 # uncomment if needed
 5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_basement.sh >/dev/null 2>&1
-17,47 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_trv.sh >/dev/null 2>&1
+11,41 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_trv.sh >/dev/null 2>&1
+13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bathroom_trv.sh >/dev/null 2>&1
+16,46 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_washroom_trv.sh >/dev/null 2>&1
+17,47 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_trv.sh >/dev/null 2>&1
+19,49 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_gallery_trv.sh >/dev/null 2>&1
 7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_ht.sh >/dev/null 2>&1
 8,38 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_gallery_ht.sh >/dev/null 2>&1
 #9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_ht.sh >/dev/null 2>&1
