@@ -45,3 +45,6 @@
 #9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_ht.sh >/dev/null 2>&1
 */10 * * * * . /root/.home-automation; /root/home_automation/monitor_wind_speed.sh >/dev/null 2>&1
 
+11 9 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
+56 17 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
+
