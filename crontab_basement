@@ -48,6 +48,9 @@
 30 6 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_lamp_on.sh >/dev/null 2>&1
 53 21 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_lamp_off.sh >/dev/null 2>&1
 
+27 7-19 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_fan_on.sh >/dev/null 2>&1
+50 7-19 * * * . /root/.home-automation; /root/home_automation/turn_plant_room_fan_off.sh >/dev/null 2>&1
+
 11 8 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
 26 19 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
 
