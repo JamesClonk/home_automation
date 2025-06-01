@@ -34,7 +34,7 @@ function set_awning {
 }
 
 # safety checks for bad weather, dont extend awning if it rains / is windy / etc..
-if (( ${CURRENT_WIND_SPEED} > 3 )); then
+if (( ${CURRENT_WIND_SPEED} > 4 )); then
   set_awning 100
   exit 0
 fi
