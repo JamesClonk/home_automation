@@ -27,6 +27,12 @@ function set_awning {
   TARGET_VALUE=$1
   SHELLY_DATA=$(curl -s ${SHELLY_CLOUD_URL}/device/status -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}" | jq -r '.data.device_status."cover:0".current_pos' | awk '{print int($1);}')
   sleep 5
+  # safeguard, if we set value to 95 for example then dont extend awning anymore
+  if (( $TARGET_VALUE < 90 )); then
+    if (( ${SHELLY_DATA} < 100 )); then
+      return
+    fi
+  fi
   if (( ${SHELLY_DATA} != $TARGET_VALUE )); then
     curl -s ${SHELLY_CLOUD_URL}/device/relay/roller/control -d "id=${SHELLY_AWNING_DEVICE_ID}&auth_key=${SHELLY_AUTH_KEY}&pos=${TARGET_VALUE}"
     sleep 5
