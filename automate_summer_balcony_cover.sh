@@ -30,6 +30,7 @@ function set_awning {
   # safeguard, if we set value to 95 for example then dont extend awning anymore
   if (( $TARGET_VALUE < 90 )); then
     if (( ${SHELLY_DATA} < 100 )); then
+      echo "nope, wont do it!"
       return
     fi
   fi
