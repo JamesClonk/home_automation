@@ -69,6 +69,9 @@
 6,8 8 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_on.sh >/dev/null 2>&1
 24,28 19 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_lamp_off.sh >/dev/null 2>&1
 
+5 23 * * * . /root/.home-automation; /root/home_automation/turn_neocid_on.sh >/dev/null 2>&1
+55,57 4 * * * . /root/.home-automation; /root/home_automation/turn_neocid_off.sh >/dev/null 2>&1
+
 #22,23 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_on.sh >/dev/null 2>&1
 #52,53 6,10,14,18 * * * . /root/.home-automation; /root/home_automation/turn_food_plants_fan_off.sh >/dev/null 2>&1
 
