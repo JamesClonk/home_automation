@@ -43,6 +43,7 @@
 7,37 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_ht.sh >/dev/null 2>&1
 8,38 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_gallery_ht.sh >/dev/null 2>&1
 #9,39 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_living_room_ht.sh >/dev/null 2>&1
+33 * * * * . /root/.home-automation; /root/home_automation/monitor_obloc_occupancy.sh >/dev/null 2>&1
 */11 * * * * . /root/.home-automation; /root/home_automation/monitor_wind_speed.sh >/dev/null 2>&1
 */13 * * * * . /root/.home-automation; /root/home_automation/automate_summer_balcony_cover.sh >/dev/null 2>&1
 
