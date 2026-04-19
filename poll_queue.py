@@ -119,8 +119,18 @@ def poll():
             if message["message"] == "toggle" and delete_message(message["id"]):
                 print "./toggle_bedroom_lamp.sh"
                 os.system("./toggle_bedroom_lamp.sh")
+        if message["queue"] == "bass_shaker":
+            if message["message"] == "on" and delete_message(message["id"]):
+                print "./turn_bassshaker_on.sh"
+                os.system("./turn_bassshaker_on.sh")
+            if message["message"] == "off" and delete_message(message["id"]):
+                print "./turn_bassshaker_off.sh"
+                os.system("./turn_bassshaker_off.sh")
+            if message["message"] == "toggle" and delete_message(message["id"]):
+                print "./toggle_bassshaker.sh"
+                os.system("./toggle_bassshaker.sh")
 
 while True:
     poll()
-    time.sleep(10)
+    time.sleep(15)
 
