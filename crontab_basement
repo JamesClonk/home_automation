@@ -34,6 +34,7 @@
 17 17 * * 1,2,3,4,5 /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
 
 # uncomment if needed
+13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_poll_queue.sh >/dev/null 2>&1
 5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_basement.sh >/dev/null 2>&1
 #11,41 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_trv.sh >/dev/null 2>&1
 #13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bathroom_trv.sh >/dev/null 2>&1
@@ -58,4 +59,7 @@
 
 6 23 * * * . /root/.home-automation; /root/home_automation/turn_neocid_on.sh >/dev/null 2>&1
 56 4 * * * . /root/.home-automation; /root/home_automation/turn_neocid_off.sh >/dev/null 2>&1
+
+#33 19 * * * . /root/.home-automation; /root/home_automation/turn_bassshaker_on.sh >/dev/null 2>&1
+47 0 * * * . /root/.home-automation; /root/home_automation/turn_bassshaker_off.sh >/dev/null 2>&1
 
