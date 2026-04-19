@@ -34,7 +34,7 @@
 17 17 * * 1,2,3,4,5 /root/home_automation/dnsmasq.d/dnsmasq_unblock.sh >/dev/null 2>&1
 
 # uncomment if needed
-13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_poll_queue.sh >/dev/null 2>&1
+#13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_poll_queue.sh >/dev/null 2>&1
 5,35 * * * * . /root/.home-automation; /root/home_automation/monitor_basement.sh >/dev/null 2>&1
 #11,41 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bedroom_trv.sh >/dev/null 2>&1
 #13,43 * * * * . /root/.home-automation; /root/home_automation/monitor_shelly_bathroom_trv.sh >/dev/null 2>&1
